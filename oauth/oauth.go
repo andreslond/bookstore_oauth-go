@@ -16,7 +16,7 @@ const (
 	//Viene de una dirección interna de la red o de una externa?
 	headerXPublic   = "X-Public"
 	headerXClientId = "X-Client-Id"
-	headerXCallerId = "X-User-Id"
+	headerXCallerId = "X-Caller-Id"
 
 	paramAccessToken = "access_token"
 )
@@ -110,8 +110,8 @@ func getAccessToken(accessTokenId string) (*accessToken, rest_errors.RestErr) {
 	response := oauthRestClient.Get(fmt.Sprintf("/oauth/access_token/%s", accessTokenId))
 
 	if response == nil || response.Response == nil {
-
-		return nil, rest_errors.NewInternalServerError("invalid restclient response when trying to get access token", errors.New("database error"))
+		return nil, rest_errors.NewInternalServerError("invalid restclient response when trying to get access token",
+			errors.New("network timeout"))
 	}
 
 	if response.StatusCode > 299 {
